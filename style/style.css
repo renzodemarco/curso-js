@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    display: inline-block;
+}
+
+body {
+    display: grid;
+    width: 100%;
+    min-height: 100vh;
+    grid-template-areas: 
+    "titulo"
+    "contenido";
+    grid-template-rows: 120px;
+
+}
+
+.titulo {
+    grid-area: "titulo";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(75, 21, 126);
+    color: #fff;
+}
+
+h1 {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.contenido {
+    grid-area: "contenido";
+    height: 100%;
+    width: 100%;
+    background-color: rgb(218, 212, 224);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.card {
+    width: 230px;
+    height: 280px;
+    margin: 1em;
+    padding: 1.6em;
+    display: flex;
+    justify-content: center;
+}
+
+.card-img-top {
+    width: 6em;
+    align-self: center;
+}
+
+.card h2 {
+    font-weight: 700;
+    text-align: center;
+}
+
+.card p {
+    font-weight: 600;
+    text-align: center;
+}
+
+.card-body {
+    padding: 0;
+    padding-top: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.6em;
+    width: 2.6em;
+    padding: .4em;
+}
+
+.card button img {
+    width: 1.6em;
+}
+
+.add-paciente-container {
+    order: 99;
+    width: min-content;
+    height: min-content;
+}
+
+.add-paciente {
+    background-color: rgb(218, 212, 224);
+    border: rgb(75, 21, 126) 2px dashed;
+    opacity: .4;
+}
+
+.add-paciente img {
+    width: 8em;
+    margin: 1em;
+}
+
+.add-paciente p {
+    font-size: 1.1em;
+    color: rgb(75, 21, 126);
+}
+
+.contenido .card:hover {
+    cursor: pointer;
+    transform: scale(1.04);
+    transition: 0.2s;
+}
+
+.sombra {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    height: max-content; 
+    background-color: rgba(85, 76, 94, 0.856);
+}
+
+.titulo-pop {
+    height: 3.4em;
+    background-color:rgb(75, 21, 126);
+    color: #fff;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.nuevo-paciente {
+    margin: 2em 8em;
+    background-color:rgb(218, 212, 224);
+}
+
+.nuevo-paciente h2 {
+    text-align: center;
+    padding: 1em;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.nuevo-paciente form {
+    padding: 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.mb-3 {
+    min-width: 10em;
+}
+
+#historiaPacNuevo {
+    min-width: 32em;
+    min-height: 4em;
+}
+
+.medicaciones {
+    min-width: 26em;
+}
+
+.nuevo-paciente .list-group-item {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.list-group-item-buttons {
+    display: flex;
+}
+
+.list-group button {
+    width: 1.6em;
+    height: 1.6em;
+    opacity: .8;
+    margin-left: .6em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.list-group button img {
+    width: 1em;
+}
+
+#addNuevaMedicacion {
+    color: #888
+}
+
+.nuevo-paciente-submit {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.nuevo-paciente-submit button {
+    margin: 1em 2em;
+}
+
+.mostrar-paciente {
+    height: auto;
+    width: auto;
+    margin: 2em 8em;
+}
+
+.btn-close {
+    display: inline-block;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+}
+
+.mostrar-paciente h2 {
+    font-size: 3em;
+}
+
+.mostrar-paciente h3 {
+    text-align: center;
+    font-size: 1.6em;
+}
+
+.mostrar-paciente .list-group-item {
+    text-align: center;
+}
+
+.list-group-flush {
+    font-weight: 700;
+}
+
+.list-group-flush p {
+    font-weight: 400;
+    display: inline-block;
+    margin: 0;
+}
+
+@keyframes aparecer {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes desaparecer {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.alert-danger {
+    z-index: 900;
+}
