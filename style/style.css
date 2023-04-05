@@ -130,7 +130,6 @@ h1 {
     position: absolute;
     width: 100%;
     min-height: 100%;
-    height: max-content; 
     background-color: rgba(85, 76, 94, 0.856);
 }
 

@@ -43,7 +43,7 @@ class Paciente {
         if (this.sexo == "") this.sexo = "Sin información";
         if (this.edad == "") this.edad = "Sin información";
         if (this.raza == "") this.raza = "Sin información";
-        if (this.peso == "") this.peso = "Sin información";
+        if (this.peso == "kg") this.peso = "Sin información";
         if (this.historia == "") this.historia = "Sin información";
     }
 }
@@ -107,7 +107,7 @@ function actualizarPacientes(lista) {
             sexoPacActual.innerHTML = paciente.sexo;
             edadPacActual.innerHTML = paciente.edad;
             razaPacActual.innerHTML = paciente.raza;
-            pesoPacActual.innerHTML = paciente.peso + "kg";
+            pesoPacActual.innerHTML = paciente.peso + " kg";
             historiaPacActual.innerHTML = paciente.historia;
             abrirSombra(sombraPacActual);
         })
@@ -149,8 +149,10 @@ function imgPaciente(paciente) {
 
 // Función que cambia clases para mostrar los divs ocultos
 function abrirSombra(sombra) {
+    alto = document.body.scrollHeight + "px";
     sombra.classList.replace("hidden", "show");
     sombra.style.animation = "aparecer .5s";
+    sombra.style = "height: " + alto;
 }
 
 // Función que cambia clases para ocultar los divs visibles
