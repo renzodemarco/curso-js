@@ -4,7 +4,7 @@ let IDseleccionado;
 const modalNuevoPaciente = document.getElementById("modalNuevoPaciente"),
     cancelNuevoPaciente = document.getElementById("cancelNuevoPaciente"),
     agregarNuevoPaciente = document.getElementById("agregarNuevoPaciente"),
-    confirmarNuevoPaciente = document.getElementById("confirmarNuevoPaciente")
+    confirmarNuevoPaciente = document.getElementById("confirmarNuevoPaciente"),
     nombrePacNuevo = document.getElementById("nombrePacNuevo"),
     propPacNuevo = document.getElementById("propPacNuevo"),
     especiePacNuevo = document.getElementById("especiePacNuevo"),
@@ -108,7 +108,7 @@ function eliminarPaciente(id) {
 }
 
 function verPaciente(paciente) {
-    abrirSombra(modalPacActual);
+    abrirModal(modalPacActual);
     imgPacActual.src = imgPaciente(paciente);
     nombrePacActual.innerHTML = paciente.nombre;
     propPacActual.innerHTML = paciente.propietario;
@@ -120,7 +120,7 @@ function verPaciente(paciente) {
 }
 
 function verModificarPaciente(paciente) {
-    abrirSombra(modalNuevoPaciente);
+    abrirModal(modalNuevoPaciente);
     nombrePacNuevo.value = paciente.nombre;
     propPacNuevo.value = paciente.propietario;
     especiePacNuevo.value = paciente.especie;
@@ -165,13 +165,13 @@ function guardarEnStorage(lista) {
 }
 
 // Función que cambia clases para mostrar los divs ocultos QUEDA!
-function abrirSombra(sombra) {
+function abrirModal(sombra) {
     sombra.classList.replace("hidden", "show");
     sombra.style.animation = "aparecer .5s";
 }
 
 // Función que cambia clases para ocultar los divs visibles QUEDA!
-function cerrarSombra(sombra) {
+function cerrarModal(sombra) {
     sombra.style.animation = "desaparecer .5s";
     setTimeout(() => sombra.classList.replace("show", "hidden"), 500);
 }
@@ -183,6 +183,20 @@ function filtrar(lista, caracteres, propiedad) {
     return array;
 }
 
+function verificarInput(input) {
+    return typeof input.value === "string" && input.value.trim().length > 0;
+}
+
+function inputVacios(input) {
+    if (!verificarInput(input)) input.classList.add("incompleto");
+    else input.classList.remove("incompleto");
+}
+
+function resetInput(...input) {
+    input.classList.remove("incompleto")
+}
+
+
 inputBuscar.addEventListener("keyup", ()=> {
     actualizarPacientes(filtrar(listaPacientes, inputBuscar.value, selectBuscar.value))
 })
@@ -192,23 +206,32 @@ selectBuscar.addEventListener("change", ()=> {
 })
 
 agregarNuevoPaciente.addEventListener("click", ()=> {
-    abrirSombra(modalNuevoPaciente);
+    abrirModal(modalNuevoPaciente);
     confirmarNuevoPaciente.classList.remove("hidden");
     confirmarCambiosPaciente.classList.add("hidden");
 })
 
 cancelNuevoPaciente.addEventListener("click", ()=> {
-    cerrarSombra(modalNuevoPaciente);
+    cerrarModal(modalNuevoPaciente);
     nuevoPacienteForm.reset();    
 })
 
 confirmarNuevoPaciente.addEventListener("click", ()=> {
-    if (!nombrePacNuevo.value) {
-        alert("Faltan datos putito")
+    inputVacios(nombrePacNuevo);
+    inputVacios(propPacNuevo);
+    inputVacios(especiePacNuevo);
+
+    if (!verificarInput(nombrePacNuevo) || !verificarInput(propPacNuevo) || !verificarInput(especiePacNuevo)) {
+        Swal.fire({
+            title: 'Por favor, complete los campos obligatorios',
+            icon: 'error',
+            confirmButtonText: "Entendido"
+        })
     }
+
     else {
     agregarPaciente(nombrePacNuevo.value, propPacNuevo.value, especiePacNuevo.value, sexoPacNuevo.value, edadPacNuevo.value, razaPacNuevo.value, pesoPacNuevo.value, historiaPacNuevo.value);
-    cerrarSombra(modalNuevoPaciente);
+    cerrarModal(modalNuevoPaciente);
     guardarEnStorage(listaPacientes); 
     nuevoPacienteForm.reset();
     actualizarPacientes(listaPacientes);
@@ -216,84 +239,49 @@ confirmarNuevoPaciente.addEventListener("click", ()=> {
 })
 
 cerrarPacActual.addEventListener("click", () => {
-    cerrarSombra(modalPacActual);
+    cerrarModal(modalPacActual);
 })
 
 confirmarCambiosPaciente.addEventListener("click", ()=> {
-    for (i = 0; i < listaPacientes.length; i++) {
-        if (listaPacientes[i].id === IDseleccionado) {
-            listaPacientes[i].nombre = nombrePacNuevo.value;
-            listaPacientes[i].propietario = propPacNuevo.value;
-            listaPacientes[i].especie = especiePacNuevo.value
-            listaPacientes[i].sexo = sexoPacNuevo.value
-            listaPacientes[i].edad = edadPacNuevo.value
-            listaPacientes[i].raza = razaPacNuevo.value
-            listaPacientes[i].peso = pesoPacNuevo.value
-            listaPacientes[i].historia = historiaPacNuevo.value
-        }
-    }
-    nuevoPacienteForm.reset();
-    cerrarSombra(modalNuevoPaciente);
-    actualizarPacientes(listaPacientes);
-    guardarEnStorage(listaPacientes);
-})
+    inputVacios(nombrePacNuevo);
+    inputVacios(propPacNuevo);
+    inputVacios(especiePacNuevo);
 
-/*
-// Función que cambia clases para mostrar los divs ocultos QUEDA!
-function abrirSombra(sombra) {
-    alto = document.body.scrollHeight + "px";
-    sombra.classList.replace("hidden", "show");
-    sombra.style.animation = "aparecer .5s";
-    sombra.style = "height: " + alto;
-}
-
-// Función que cambia clases para ocultar los divs visibles QUEDA!
-function cerrarSombra(sombra) {
-    sombra.style.animation = "desaparecer .5s";
-    setTimeout(() => sombra.classList.replace("show", "hidden"), 500);
-}
-
-// Función para que los styles de los inputs vuelvan a estar vacíos
-function vaciarStyles(input) {
-    input.style = ''
-}
-
-// Evento para agregar nuevo paciente
-agregarNuevoPaciente.addEventListener("click", () => {
-    // Validación que no permite agregar nuevo paciente si su nombre, propietario o especie están vacíos. El usuario se dará cuenta de la info que falte ya que su input aparecerá con un borde rojo.
-    if (nombrePacNuevo.value == '') {
-        nombrePacNuevo.style = "border: red 2px solid"
-    }
-    if (propPacNuevo.value == '') {
-        propPacNuevo.style = "border: red 2px solid"
-    }
-    if (especiePacNuevo.value == '') {
-        especiePacNuevo.style = "border: red 2px solid"
+    if (!verificarInput(nombrePacNuevo) || !verificarInput(propPacNuevo) || !verificarInput(especiePacNuevo)) {
+        Swal.fire({
+            title: 'Por favor, complete los campos obligatorios',
+            icon: 'error',
+            confirmButtonText: "Entendido"
+        })
     }
 
-    // En caso de existir la info anterior:
     else {
-        agregarPaciente(nombrePacNuevo.value, propPacNuevo.value, especiePacNuevo.value, sexoPacNuevo.value, edadPacNuevo.value, razaPacNuevo.value, pesoPacNuevo.value, historiaPacNuevo.value); // Se crea el nuevo paciente y se pushea en listaPacientes
-        cerrarSombra(sombraNuevoPaciente); // Se cierra el menú para agregar pacientes
-        guardarEnStorage(listaPacientes); // Se guarda en localStorage 
-        nuevoPacienteForm.reset(); // Los inputs vuelven a estar vacíos
-        vaciarStyles(nombrePacNuevo); // Vaciamos los styles de los inputs (en caso de que hayan estado rojos)
-        vaciarStyles(propPacNuevo);
-        vaciarStyles(especiePacNuevo);
-        actualizarPacientes(listaPacientes); // Mostramos la nueva lista de pacientes en el container
-        agregarAddCard() // Agregamos al final la card para sumar pacientes
+        for (i = 0; i < listaPacientes.length; i++) {
+            if (listaPacientes[i].id === IDseleccionado) {
+                listaPacientes[i].nombre = nombrePacNuevo.value;
+                listaPacientes[i].propietario = propPacNuevo.value;
+                listaPacientes[i].especie = especiePacNuevo.value
+                listaPacientes[i].sexo = sexoPacNuevo.value
+                listaPacientes[i].edad = edadPacNuevo.value
+                listaPacientes[i].raza = razaPacNuevo.value
+                listaPacientes[i].peso = pesoPacNuevo.value
+                listaPacientes[i].historia = historiaPacNuevo.value
+            }
+        }
+        nuevoPacienteForm.reset();
+        cerrarModal(modalNuevoPaciente);
+        actualizarPacientes(listaPacientes);
+        guardarEnStorage(listaPacientes);
     }
 })
 
-// Evento para cerrar el menú de agregar pacientes QUEDA!
 cancelNuevoPaciente.addEventListener("click", () => {
-    cerrarSombra(sombraNuevoPaciente);
+    cerrarModal(modalNuevoPaciente);
+    resetInput(nombrePacNuevo);
+    resetInput(propPacNuevo);
+    resetInput(especiePacNuevo);
     nuevoPacienteForm.reset();
-    vaciarStyles(nombrePacNuevo)
-    vaciarStyles(propPacNuevo);
-    vaciarStyles(especiePacNuevo);
 })
-*/
 
 window.addEventListener("load", ()=> {
     fetch("https://dog.ceo/api/breeds/image/random")

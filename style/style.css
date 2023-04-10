@@ -342,3 +342,7 @@ h1 {
     height: 2em;
     width: 2em;
 }
+
+.incompleto {
+    border: 1px solid #e22;
+}
