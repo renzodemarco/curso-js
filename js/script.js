@@ -108,9 +108,7 @@ function actualizarPacientes(lista) {
 function eliminarPaciente(id) {
     for (i = 0; i < listaPacientes.length; i++) {
         listaPacientes[i].id === id && listaPacientes.splice(i, 1);
-        break;
-        }
-    guardarEnStorage(listaPacientes);
+    }
 }
 
 // Función que me abre un modal mostrando la info del paciente seleccionado
@@ -159,8 +157,8 @@ function confirmarEliminacion(id) {
     }).then(result => {
         if (result.isConfirmed) {
             eliminarPaciente(id);
+            guardarEnStorage(listaPacientes);
             actualizarPacientes(listaPacientes);
-            guardarEnStorage(listaPacientes)
             Swal.fire({
                 title: 'Paciente eliminado',
                 icon: 'success',
@@ -201,7 +199,7 @@ function verificarInput(input) {
 }
 
 // Función que cambia la class de los inputs vacíos para que el borde sea rojo
-function inputVacios(input) {
+function colorearInput(input) {
     (!verificarInput(input)) ? input.classList.add("incompleto") : input.classList.remove("incompleto");
 }
 
@@ -247,9 +245,11 @@ cancelNuevoPaciente.addEventListener("click", () => {
 
 // Evento que chequea que el paciente ingresado/modificado contenga nombre, propietario y especie para luego agregarlo a la lista de pacientes
 confirmarNuevoPaciente.addEventListener("click", () => {
-    inputVacios(nombrePacNuevo);
-    inputVacios(propPacNuevo);
-    inputVacios(especiePacNuevo);
+
+    // PONER ESTOS EN UNA SOLA FUNCION
+    colorearInput(nombrePacNuevo);
+    colorearInput(propPacNuevo);
+    colorearInput(especiePacNuevo);
 
     if (!verificarInput(nombrePacNuevo) || !verificarInput(propPacNuevo) || !verificarInput(especiePacNuevo)) {
         faltanDatos();
@@ -265,9 +265,9 @@ confirmarNuevoPaciente.addEventListener("click", () => {
 
 // Evento que chequea que el paciente ingresado/modificado contenga nombre, propietario y especie para luego modificarlo en la lista de pacientes
 confirmarCambiosPaciente.addEventListener("click", () => {
-    inputVacios(nombrePacNuevo);
-    inputVacios(propPacNuevo);
-    inputVacios(especiePacNuevo);
+    colorearInput(nombrePacNuevo);
+    colorearInput(propPacNuevo);
+    colorearInput(especiePacNuevo);
 
     if (!verificarInput(nombrePacNuevo) || !verificarInput(propPacNuevo) || !verificarInput(especiePacNuevo)) {
         faltanDatos();
