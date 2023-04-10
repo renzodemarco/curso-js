@@ -57,8 +57,7 @@ function agregarPaciente(nombre, propietario, especie, sexo, edad, raza, peso, h
 // Función que me muestra la lista de pacientes en el navegador
 function actualizarPacientes(lista) {
     contenedorLista.innerHTML = "";
-
-    lista.forEach(paciente => {
+    lista.forEach((paciente, indice) => {
         nuevoPaciente = document.createElement("li");
         nuevoPaciente.classList.add("list-group-item", "d-flex", "align-items-center", "paciente-en-lista");
         nuevoPaciente.innerHTML =
@@ -69,16 +68,26 @@ function actualizarPacientes(lista) {
             <div class="nombre-paciente fw-bold">${paciente.nombre}</div>
             <div class="nombre-propietario">${paciente.propietario}</div>
         </div>
-        <button class="btn-primary" id="botonObservar-${paciente.id}" title="Ver paciente">
+        <button class="btn-primary" id="botonObservar${indice}" title="Ver paciente">
             <img src="./img/ver.svg"></img>
+        </button>
+        <button class="btn-secondary" id="botonModificar${indice}" title="Ver paciente">
+            <img src="./img/editar.svg"></img>
+        </button>
+        <button class="btn-danger" id="botonEliminar${indice}" title="Ver paciente">
+            <img src="./img/eliminar.svg"></img>
         </button>`
-        
-        let botonObservar = document.getElementById(`botonObservar-${paciente.id}`);
+        contenedorLista.appendChild(nuevoPaciente);
+
+        // Acá accedo a cada botón mediante su índice para agregarle un EventListener a cada uno
+        let botonObservar = document.getElementById(`botonObservar${indice}`);
+        let botonModificar = document.getElementById(`botonModificar${indice}`);
+        let botonEliminar = document.getElementById(`botonEliminar${indice}`)
 
         botonObservar.addEventListener("click", () => {
             verPaciente(paciente);
         });
-/*
+
         botonModificar.addEventListener("click", () => {
             IDseleccionado = paciente.id;
             verModificarPaciente(paciente);
@@ -88,8 +97,6 @@ function actualizarPacientes(lista) {
             IDseleccionado = paciente.id;
             confirmarEliminacion(IDseleccionado);
         })
-*/
-        contenedorLista.appendChild(nuevoPaciente);
     })
 }
 
@@ -121,7 +128,7 @@ function verModificarPaciente(paciente) {
     confirmarCambiosPaciente.classList.remove("hidden");
 }
 
-// Función que dispara un alert en el que el usuario confirma si realmente desea eliminar a un paciente
+// Función que dispara un alert en el que el usuario confirma si desea eliminar a un paciente
 function confirmarEliminacion(id) {
     Swal.fire({
         icon: "warning",
@@ -180,7 +187,7 @@ function verificarInput(input) {
     return typeof input.value === "string" && input.value.trim().length > 0;
 }
 
-// Función que muestra un alerta de que falta contenido en los inputs
+// Función que muestra un alert de que falta contenido en los inputs
 function faltanDatos() {
     Swal.fire({
         title: 'Por favor, complete los campos obligatorios',
