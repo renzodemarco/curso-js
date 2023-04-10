@@ -165,15 +165,15 @@ function guardarEnStorage(lista) {
 }
 
 // Función que cambia clases para mostrar los divs ocultos QUEDA!
-function abrirModal(sombra) {
-    sombra.classList.replace("hidden", "show");
-    sombra.style.animation = "aparecer .5s";
+function abrirModal(modal) {
+    modal.classList.replace("hidden", "show");
+    modal.style.animation = "aparecer .5s";
 }
 
 // Función que cambia clases para ocultar los divs visibles QUEDA!
-function cerrarModal(sombra) {
-    sombra.style.animation = "desaparecer .5s";
-    setTimeout(() => sombra.classList.replace("show", "hidden"), 500);
+function cerrarModal(modal) {
+    modal.style.animation = "desaparecer .5s";
+    setTimeout(() => modal.classList.replace("show", "hidden"), 500);
 }
 
 function filtrar(lista, caracteres, propiedad) {
