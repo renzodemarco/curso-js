@@ -17,12 +17,11 @@
 body {
     display: grid;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     grid-template-areas: 
     "titulo"
     "contenido";
-    grid-template-rows: 120px;
-
+    grid-template-rows: 20vh 80vh;
 }
 
 .titulo {
@@ -44,9 +43,91 @@ h1 {
     height: 100%;
     width: 100%;
     background-color: rgb(218, 212, 224);
+    display: grid;
+    grid-template-columns: 35% 65%;
+}
+
+.contenedor-izq {
+    grid-column: 1 / 2;
+    background-color: rgb(204, 197, 214);
+}
+
+.buscador {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.input-buscar {
+    margin-top: 18px;
+    width: 66%;
+    height: 32px;
+}
+
+.select-buscar {
+    margin-top: 18px;
+    width: 24%;
+}
+
+.botones {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.button-izq {
+    margin: 16px;
+    margin-top: 20px;
+    height: 46px;
+    width: 260px;
+    padding: 6px;
+    border: none;
+    background-color:rgba(75, 21, 126, 0.810);
+    font-size: 17px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-izq:hover {
+    background-color: rgba(75, 21, 126, 0.921);
+}
+
+.lista-pacientes {
+    grid-column: 2 / 3;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
     justify-content: flex-start;
+    overflow-y: auto;
+}
+
+.especie-img {
+    margin-right: 12px;
+}
+
+.nombre-paciente {
+    font-size: 20px;
+}
+
+.nombre-propietario {
+    font-size: 14px;
+}
+
+.lista-pacientes button {
+    border: none;
+    margin: 4px;
+    border-radius: 40%;
+}
+
+.btn-primary {
+    background-color: rgba(75, 21, 126, 0.810);
+}
+
+.btn-primary:hover {
+    background-color: rgba(75, 21, 126, 0.921);
 }
 
 .card {
@@ -98,27 +179,6 @@ h1 {
     width: 1.6em;
 }
 
-.add-paciente-container {
-    order: 99;
-    width: min-content;
-    height: min-content;
-}
-
-.add-paciente {
-    background-color: rgb(218, 212, 224);
-    border: rgb(75, 21, 126) 2px dashed;
-    opacity: .4;
-}
-
-.add-paciente img {
-    width: 8em;
-    margin: 1em;
-}
-
-.add-paciente p {
-    font-size: 1.1em;
-    color: rgb(75, 21, 126);
-}
 
 .contenido .card:hover {
     cursor: pointer;
@@ -194,7 +254,12 @@ h1 {
 }
 
 .list-group button img {
-    width: 1em;
+    width: 16px;
+}
+
+.paciente-en-lista {
+    height: 62px;
+    margin: 1px 1px 0;
 }
 
 #addNuevaMedicacion {
@@ -267,4 +332,13 @@ h1 {
 
 .alert-danger {
     z-index: 900;
+}
+
+.list-group img {
+    width: 2em;
+}
+
+.list-group button {
+    height: 2em;
+    width: 2em;
 }

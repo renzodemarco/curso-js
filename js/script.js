@@ -1,10 +1,10 @@
-// Primero declaro todas las variables globales que voy a utilizar:
 let listaPacientes;
+let IDseleccionado;
 
-const cardAddPaciente = document.getElementById("cardAddPaciente"),
-    sombraNuevoPaciente = document.getElementById("sombraNuevoPaciente"),
+const modalNuevoPaciente = document.getElementById("modalNuevoPaciente"),
     cancelNuevoPaciente = document.getElementById("cancelNuevoPaciente"),
     agregarNuevoPaciente = document.getElementById("agregarNuevoPaciente"),
+    confirmarNuevoPaciente = document.getElementById("confirmarNuevoPaciente")
     nombrePacNuevo = document.getElementById("nombrePacNuevo"),
     propPacNuevo = document.getElementById("propPacNuevo"),
     especiePacNuevo = document.getElementById("especiePacNuevo"),
@@ -13,10 +13,9 @@ const cardAddPaciente = document.getElementById("cardAddPaciente"),
     razaPacNuevo = document.getElementById("razaPacNuevo"),
     pesoPacNuevo = document.getElementById("pesoPacNuevo"),
     historiaPacNuevo = document.getElementById("historiaPacNuevo"),
-    contenedorCards = document.getElementById("contenedorCards"),
     nuevoPacienteForm = document.getElementById("nuevoPacienteForm"),
-    sombraPacActual = document.getElementById("sombraPacActual"),
-    closePacActual = document.getElementById("closePacActual"),
+    modalPacActual = document.getElementById("modalPacActual"),
+    cerrarPacActual = document.getElementById("cerrarPacActual"),
     imgPacActual = document.getElementById("imgPacActual"),
     nombrePacActual = document.getElementById("nombrePacActual"),
     propPacActual = document.getElementById("propPacActual"),
@@ -24,9 +23,13 @@ const cardAddPaciente = document.getElementById("cardAddPaciente"),
     edadPacActual = document.getElementById("edadPacActual"),
     razaPacActual = document.getElementById("razaPacActual"),
     pesoPacActual = document.getElementById("pesoPacActual"),
-    historiaPacActual = document.getElementById("historiaPacActual");
+    historiaPacActual = document.getElementById("historiaPacActual"),
+    contenedorLista = document.getElementById("contenedorLista"),
+    confirmarCambiosPaciente = document.getElementById("confirmarCambiosPaciente"),
+    inputBuscar = document.getElementById("inputBuscar"),
+    selectBuscar = document.getElementById("selectBuscar");
 
-// Creo la clase paciente con su constructor y un método para que le dé un "Sin información" a la propiedad cuando esta se encuentra vacía
+
 class Paciente {
     constructor(nombre, propietario, especie, sexo, edad, raza, peso, historia) {
         this.nombre = nombre;
@@ -37,117 +40,206 @@ class Paciente {
         this.raza = raza;
         this.peso = peso;
         this.historia = historia;
-    }
-
-    verificarDatos() {
-        if (this.sexo == "") this.sexo = "Sin información";
-        if (this.edad == "") this.edad = "Sin información";
-        if (this.raza == "") this.raza = "Sin información";
-        if (this.peso == "kg") this.peso = "Sin información";
-        if (this.historia == "") this.historia = "Sin información";
+        this.id = Math.round(Math.random()*100000)
     }
 }
 
-
-// Función para agregar pacientes y pushearlos en el array listaPacientes
 function agregarPaciente(nombre, propietario, especie, sexo, edad, raza, peso, historia) {
     let nuevoPaciente = new Paciente(nombre, propietario, especie, sexo, edad, raza, peso, historia);
-    nuevoPaciente.verificarDatos();
     listaPacientes.push(nuevoPaciente);
 }
 
-// Función para que se actualice el container mostrando una carta por cada paciente
 function actualizarPacientes(lista) {
-    contenedorCards.innerHTML = "";
+    contenedorLista.innerHTML = "";
 
     for (const paciente of lista) {
-        // Esto es un lío pero tuve que ir creando elemento por elemento ya que si agregaba todo como un innerHTML después no me permitía sumarle eventos (cosa que voy a necesitar al darle funciones de modificar o eliminar pacientes)
-        const card = document.createElement("div");
-        const img = document.createElement("img");
-        const cardBody = document.createElement("div");
-        const nombrePaciente = document.createElement("h2");
-        const nombrePropietario = document.createElement("p");
-        const buttonContainer = document.createElement("div");
-        const botonEditar = document.createElement("button");
-        const botonEliminar = document.createElement("button");
-        const imgEditar = document.createElement("img");
-        const imgEliminar = document.createElement("img");
-        const imagen = imgPaciente(paciente);
+        nuevoPaciente = document.createElement("li");
+        botonObservar = document.createElement("button");
+        botonModificar = document.createElement("button");
+        botonEliminar = document.createElement("button");
+        botonObservar.classList.add("btn-primary");
+        botonModificar.classList.add("btn-secondary");
+        botonEliminar.classList.add("btn-danger");
+        botonObservar.innerHTML = '<img src="./img/ver.svg"></img>';
+        botonObservar.setAttribute("title","Ver paciente");
+        botonModificar.innerHTML = '<img src="./img/editar.svg"></img>';
+        botonModificar.setAttribute("title","Modificar paciente");
+        botonEliminar.innerHTML = '<img src="./img/eliminar.svg">';
+        botonEliminar.setAttribute("title","Eliminar paciente");
+        nuevoPaciente.classList.add("list-group-item", "d-flex", "align-items-center", "paciente-en-lista");
+        nuevoPaciente.innerHTML = 
+        `<div class="especie-img">
+            <img src=${imgPaciente(paciente)}>
+        </div>
+        <div class="ms-2 me-auto">
+            <div class="nombre-paciente fw-bold">${paciente.nombre}</div>
+            <div class="nombre-propietario">${paciente.propietario}</div>
+        </div>`
+        nuevoPaciente.appendChild(botonObservar);
+        nuevoPaciente.appendChild(botonModificar);
+        nuevoPaciente.appendChild(botonEliminar);
 
-        imgEditar.src = "./img/editar.svg";
-        imgEliminar.src = "./img/eliminar.svg"
+        botonObservar.addEventListener("click", ()=> {
+            verPaciente(paciente);
+        });
 
-        card.classList = "card";
-        img.classList = "card-img-top";
-        cardBody.classList = "card-body";
-        nombrePropietario.classList = "card-text";
-        buttonContainer.classList = "button-container";
-        botonEditar.classList = "btn btn-primary";
-        botonEliminar.classList = "btn btn-danger";
-
-        botonEditar.appendChild(imgEditar);
-        botonEliminar.appendChild(imgEliminar);
-        buttonContainer.appendChild(botonEditar);
-        buttonContainer.appendChild(botonEliminar)
-        cardBody.appendChild(nombrePaciente);
-        cardBody.appendChild(nombrePropietario);
-        cardBody.appendChild(buttonContainer);
-        card.appendChild(img);
-        card.appendChild(cardBody)
-
-        // Acá ya voy cambiando lo que muestra cada card de acuerdo a la info del paciente
-        nombrePaciente.innerHTML = paciente.nombre;
-        nombrePropietario.innerHTML = paciente.propietario;
-        img.src = imagen;
-
-        // Agrego un evento para que cuando se haga click sobre la card me muestre la info en el div sombraPacActual
-        card.addEventListener("click", () => {
-            nombrePacActual.innerHTML = paciente.nombre;
-            propPacActual.innerHTML = paciente.propietario;
-            sexoPacActual.innerHTML = paciente.sexo;
-            edadPacActual.innerHTML = paciente.edad;
-            razaPacActual.innerHTML = paciente.raza;
-            pesoPacActual.innerHTML = paciente.peso + " kg";
-            historiaPacActual.innerHTML = paciente.historia;
-            abrirSombra(sombraPacActual);
+        botonModificar.addEventListener("click", ()=> {
+            IDseleccionado= paciente.id;
+            verModificarPaciente(paciente);
         })
 
-        // Sumo cada carta al contenedor general:
-        contenedorCards.appendChild(card);
+        botonEliminar.addEventListener("click",()=> {
+            IDseleccionado = paciente.id;
+            confirmarEliminacion(IDseleccionado);
+        })
+
+    contenedorLista.appendChild(nuevoPaciente);
     }
 }
 
-// Función para crear una card que permita seguir agregando pacientes
-function agregarAddCard() {
-    const addPacienteContainer = document.createElement("div");
-    const cardAddPaciente = document.createElement("div");
-    addPacienteContainer.classList = "add-paciente-container";
-    cardAddPaciente.classList = "card add-paciente"
-    cardAddPaciente.innerHTML = `<img src="./img/mas.svg" class="card-img-top">
-    <div class="card-body">
-        <p class="card-text">Agregar nuevo paciente</p>
-    </div>`;
-    addPacienteContainer.appendChild(cardAddPaciente);
-    contenedorCards.appendChild(addPacienteContainer);
+function eliminarPaciente(id) {
+    for (i = 0; i < listaPacientes.length; i++) {
+        if (listaPacientes[i].id === id) {
+            listaPacientes.splice(i, 1);
+            break;
+        }
+    }
+    guardarEnStorage(listaPacientes);
+}
 
-    // Evento para que al darle click se abra el menú de agregar nuevo paciente
-    cardAddPaciente.addEventListener("click", () => {
-        abrirSombra(sombraNuevoPaciente);
+function verPaciente(paciente) {
+    abrirSombra(modalPacActual);
+    imgPacActual.src = imgPaciente(paciente);
+    nombrePacActual.innerHTML = paciente.nombre;
+    propPacActual.innerHTML = paciente.propietario;
+    sexoPacActual.innerHTML = paciente.sexo;
+    edadPacActual.innerHTML = paciente.edad;
+    razaPacActual.innerHTML = paciente.raza;
+    pesoPacActual.innerHTML = paciente.peso,
+    historiaPacActual.innerHTML = paciente.historia;
+}
+
+function verModificarPaciente(paciente) {
+    abrirSombra(modalNuevoPaciente);
+    nombrePacNuevo.value = paciente.nombre;
+    propPacNuevo.value = paciente.propietario;
+    especiePacNuevo.value = paciente.especie;
+    sexoPacNuevo.value = paciente.sexo;
+    edadPacNuevo.value = paciente.edad;
+    razaPacNuevo.value = paciente.raza;
+    pesoPacNuevo.value = paciente.peso;
+    historiaPacNuevo.value = paciente.historia;
+    confirmarNuevoPaciente.classList.add("hidden");
+    confirmarCambiosPaciente.classList.remove("hidden");
+}
+
+function imgPaciente(paciente) {
+    if (paciente.especie == "Felino") return "./img/felino.svg"
+    else return "./img/canino.svg";
+}
+
+function confirmarEliminacion(id) {
+    Swal.fire({
+        icon: "warning",
+        title: "¿Desea eliminar este paciente?",
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo',
+        cancelButtonColor: '#999',
+        cancelButtonText: 'Cancelar'
+    }).then(result=> {
+        if (result.isConfirmed) {
+        eliminarPaciente(id);
+        actualizarPacientes(listaPacientes);
+        guardarEnStorage(listaPacientes)
+        Swal.fire({
+            title: 'Paciente eliminado',
+            icon: 'success',
+            confirmButtonColor: 'rgba(75, 21, 126, 0.810)'
+        })}
     })
 }
 
-// Función para guardar en localStorage
 function guardarEnStorage(lista) {
     localStorage.setItem("storagePacientes", JSON.stringify(lista))
 }
 
-// Función que agrega una imagen a cada paciente de acuerdo a si es canino o felino
-function imgPaciente(paciente) {
-    if (paciente.especie == "Canino") return "./img/canino.svg"
-    else return "./img/felino.svg";
+// Función que cambia clases para mostrar los divs ocultos QUEDA!
+function abrirSombra(sombra) {
+    sombra.classList.replace("hidden", "show");
+    sombra.style.animation = "aparecer .5s";
 }
 
-// Función que cambia clases para mostrar los divs ocultos
+// Función que cambia clases para ocultar los divs visibles QUEDA!
+function cerrarSombra(sombra) {
+    sombra.style.animation = "desaparecer .5s";
+    setTimeout(() => sombra.classList.replace("show", "hidden"), 500);
+}
+
+function filtrar(lista, caracteres, propiedad) {
+    let buscarPor;
+    propiedad == "Paciente" ? buscarPor = "nombre" : buscarPor = "propietario";
+    let array = lista.filter(paciente => paciente[buscarPor].toLowerCase().includes(caracteres.toLowerCase()));
+    return array;
+}
+
+inputBuscar.addEventListener("keyup", ()=> {
+    actualizarPacientes(filtrar(listaPacientes, inputBuscar.value, selectBuscar.value))
+})
+
+selectBuscar.addEventListener("change", ()=> {
+    actualizarPacientes(filtrar(listaPacientes, inputBuscar.value, selectBuscar.value))
+})
+
+agregarNuevoPaciente.addEventListener("click", ()=> {
+    abrirSombra(modalNuevoPaciente);
+    confirmarNuevoPaciente.classList.remove("hidden");
+    confirmarCambiosPaciente.classList.add("hidden");
+})
+
+cancelNuevoPaciente.addEventListener("click", ()=> {
+    cerrarSombra(modalNuevoPaciente);
+    nuevoPacienteForm.reset();    
+})
+
+confirmarNuevoPaciente.addEventListener("click", ()=> {
+    if (!nombrePacNuevo.value) {
+        alert("Faltan datos putito")
+    }
+    else {
+    agregarPaciente(nombrePacNuevo.value, propPacNuevo.value, especiePacNuevo.value, sexoPacNuevo.value, edadPacNuevo.value, razaPacNuevo.value, pesoPacNuevo.value, historiaPacNuevo.value);
+    cerrarSombra(modalNuevoPaciente);
+    guardarEnStorage(listaPacientes); 
+    nuevoPacienteForm.reset();
+    actualizarPacientes(listaPacientes);
+    }
+})
+
+cerrarPacActual.addEventListener("click", () => {
+    cerrarSombra(modalPacActual);
+})
+
+confirmarCambiosPaciente.addEventListener("click", ()=> {
+    for (i = 0; i < listaPacientes.length; i++) {
+        if (listaPacientes[i].id === IDseleccionado) {
+            listaPacientes[i].nombre = nombrePacNuevo.value;
+            listaPacientes[i].propietario = propPacNuevo.value;
+            listaPacientes[i].especie = especiePacNuevo.value
+            listaPacientes[i].sexo = sexoPacNuevo.value
+            listaPacientes[i].edad = edadPacNuevo.value
+            listaPacientes[i].raza = razaPacNuevo.value
+            listaPacientes[i].peso = pesoPacNuevo.value
+            listaPacientes[i].historia = historiaPacNuevo.value
+        }
+    }
+    nuevoPacienteForm.reset();
+    cerrarSombra(modalNuevoPaciente);
+    actualizarPacientes(listaPacientes);
+    guardarEnStorage(listaPacientes);
+})
+
+/*
+// Función que cambia clases para mostrar los divs ocultos QUEDA!
 function abrirSombra(sombra) {
     alto = document.body.scrollHeight + "px";
     sombra.classList.replace("hidden", "show");
@@ -155,7 +247,7 @@ function abrirSombra(sombra) {
     sombra.style = "height: " + alto;
 }
 
-// Función que cambia clases para ocultar los divs visibles
+// Función que cambia clases para ocultar los divs visibles QUEDA!
 function cerrarSombra(sombra) {
     sombra.style.animation = "desaparecer .5s";
     setTimeout(() => sombra.classList.replace("show", "hidden"), 500);
@@ -193,7 +285,7 @@ agregarNuevoPaciente.addEventListener("click", () => {
     }
 })
 
-// Evento para cerrar el menú de agregar pacientes
+// Evento para cerrar el menú de agregar pacientes QUEDA!
 cancelNuevoPaciente.addEventListener("click", () => {
     cerrarSombra(sombraNuevoPaciente);
     nuevoPacienteForm.reset();
@@ -201,17 +293,33 @@ cancelNuevoPaciente.addEventListener("click", () => {
     vaciarStyles(propPacNuevo);
     vaciarStyles(especiePacNuevo);
 })
+*/
 
-// Evento para cerrar el div en que vemos al paciente elegido
-closePacActual.addEventListener("click", () => {
-    cerrarSombra(sombraPacActual);
-})
+window.addEventListener("load", ()=> {
+    fetch("https://dog.ceo/api/breeds/image/random")
+    .then(response=> response.json())
+    .then(data=> {
+        let imagenRandom = data["message"];
+        Swal.fire({
+            title: '¡Bienvenido/a a MyVetHub!',
+            imageUrl: imagenRandom,
+            imageHeight: 250,
+            text: 'En esta web podrás almacenar información de los pacientes de tu veterinaria para una mejor organización y seguimiento clínico.',
+            confirmButtonText: "Entendido",
+            confirmButtonColor: "rgba(75, 21, 126, 0.810)"
+        })
+    })
 
-// Evento para que al cargar window se muestren los pacientes del localStorage
-window.addEventListener("load", () => {
     listaPacientes = JSON.parse(localStorage.getItem("storagePacientes"));
     if (listaPacientes != null) {
         actualizarPacientes(listaPacientes);
-    } else listaPacientes = [];
-    agregarAddCard();
+    } 
+    else {
+        fetch("./data/pacientes.json")
+        .then(response=> response.json())
+        .then(data=> {
+            actualizarPacientes(data);
+            listaPacientes = data
+        })
+    }
 })
