@@ -58,21 +58,8 @@ function agregarPaciente(nombre, propietario, especie, sexo, edad, raza, peso, h
 function actualizarPacientes(lista) {
     contenedorLista.innerHTML = "";
 
-    // VER CÓMO ARREGLAR ESTO!
-    for (const paciente of lista) {
+    lista.forEach(paciente => {
         nuevoPaciente = document.createElement("li");
-        botonObservar = document.createElement("button");
-        botonModificar = document.createElement("button");
-        botonEliminar = document.createElement("button");
-        botonObservar.classList.add("btn-primary");
-        botonModificar.classList.add("btn-secondary");
-        botonEliminar.classList.add("btn-danger");
-        botonObservar.innerHTML = '<img src="./img/ver.svg"></img>';
-        botonObservar.setAttribute("title", "Ver paciente");
-        botonModificar.innerHTML = '<img src="./img/editar.svg"></img>';
-        botonModificar.setAttribute("title", "Modificar paciente");
-        botonEliminar.innerHTML = '<img src="./img/eliminar.svg">';
-        botonEliminar.setAttribute("title", "Eliminar paciente");
         nuevoPaciente.classList.add("list-group-item", "d-flex", "align-items-center", "paciente-en-lista");
         nuevoPaciente.innerHTML =
             `<div class="especie-img">
@@ -81,15 +68,17 @@ function actualizarPacientes(lista) {
         <div class="ms-2 me-auto">
             <div class="nombre-paciente fw-bold">${paciente.nombre}</div>
             <div class="nombre-propietario">${paciente.propietario}</div>
-        </div>`
-        nuevoPaciente.appendChild(botonObservar);
-        nuevoPaciente.appendChild(botonModificar);
-        nuevoPaciente.appendChild(botonEliminar);
+        </div>
+        <button class="btn-primary" id="botonObservar-${paciente.id}" title="Ver paciente">
+            <img src="./img/ver.svg"></img>
+        </button>`
+        
+        let botonObservar = document.getElementById(`botonObservar-${paciente.id}`);
 
         botonObservar.addEventListener("click", () => {
             verPaciente(paciente);
         });
-
+/*
         botonModificar.addEventListener("click", () => {
             IDseleccionado = paciente.id;
             verModificarPaciente(paciente);
@@ -99,9 +88,9 @@ function actualizarPacientes(lista) {
             IDseleccionado = paciente.id;
             confirmarEliminacion(IDseleccionado);
         })
-
+*/
         contenedorLista.appendChild(nuevoPaciente);
-    }
+    })
 }
 
 // Función que me abre un modal mostrando la info del paciente seleccionado
