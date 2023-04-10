@@ -104,13 +104,6 @@ function actualizarPacientes(lista) {
     }
 }
 
-// Función para eliminar pacientes mediante su id
-function eliminarPaciente(id) {
-    for (i = 0; i < listaPacientes.length; i++) {
-        listaPacientes[i].id === id && listaPacientes.splice(i, 1);
-    }
-}
-
 // Función que me abre un modal mostrando la info del paciente seleccionado
 function verPaciente(paciente) {
     abrirModal(modalPacActual);
@@ -120,7 +113,7 @@ function verPaciente(paciente) {
     sexoPacActual.innerHTML = paciente.sexo || "Sin información";
     edadPacActual.innerHTML = paciente.edad || "Sin información";
     razaPacActual.innerHTML = paciente.raza || "Sin información";
-    pesoPacActual.innerHTML = paciente.peso || "Sin información",
+    pesoPacActual.innerHTML = paciente.peso || "Sin información";
     historiaPacActual.innerHTML = paciente.historia || "Sin información";
 }
 
@@ -139,11 +132,6 @@ function verModificarPaciente(paciente) {
     confirmarCambiosPaciente.classList.remove("hidden");
 }
 
-// Función que le asigna al paciente una imagen de perro o gato según su especie
-function imgPaciente(paciente) {
-    return paciente.especie == "Felino" ? "./img/felino.svg" : "./img/canino.svg";
-}
-
 // Función que dispara un alert en el que el usuario confirma si realmente desea eliminar a un paciente
 function confirmarEliminacion(id) {
     Swal.fire({
@@ -152,7 +140,7 @@ function confirmarEliminacion(id) {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         confirmButtonText: 'Sí, eliminarlo',
-        cancelButtonColor: '#999',
+        cancelButtonColor: 'rgba(75, 21, 126, 0.810)',
         cancelButtonText: 'Cancelar'
     }).then(result => {
         if (result.isConfirmed) {
@@ -162,15 +150,28 @@ function confirmarEliminacion(id) {
             Swal.fire({
                 title: 'Paciente eliminado',
                 icon: 'success',
-                confirmButtonColor: 'rgba(75, 21, 126, 0.810)'
+                confirmButtonColor: 'rgba(75, 21, 126, 0.810)',
+                confirmButtonText: "Aceptar"
             })
         }
     })
 }
 
+// Función para eliminar pacientes mediante su id
+function eliminarPaciente(id) {
+    for (i = 0; i < listaPacientes.length; i++) {
+        listaPacientes[i].id === id && listaPacientes.splice(i, 1);
+    }
+}
+
 // Función para guardar info en el localStorage
 function guardarEnStorage(lista) {
     localStorage.setItem("storagePacientes", JSON.stringify(lista))
+}
+
+// Función que le asigna al paciente una imagen de perro o gato según su especie
+function imgPaciente(paciente) {
+    return paciente.especie == "Felino" ? "./img/felino.svg" : "./img/canino.svg";
 }
 
 // Función que cambia clases para mostrar los divs ocultos
@@ -185,27 +186,9 @@ function cerrarModal(modal) {
     setTimeout(() => modal.classList.replace("show", "hidden"), 500);
 }
 
-// Función que devuelve un array con los elementos cuya propiedad contiene determinados caracteres
-function filtrar(lista, caracteres, propiedad) {
-    let buscarPor;
-    propiedad == "Paciente" ? buscarPor = "nombre" : buscarPor = "propietario";
-    let filtrado = lista.filter(paciente => paciente[buscarPor].toLowerCase().includes(caracteres.toLowerCase()));
-    return filtrado;
-}
-
 // Función que verifica si un input tiene contenido
 function verificarInput(input) {
     return typeof input.value === "string" && input.value.trim().length > 0;
-}
-
-// Función que cambia la class de los inputs vacíos para que el borde sea rojo
-function colorearInput(input) {
-    (!verificarInput(input)) ? input.classList.add("incompleto") : input.classList.remove("incompleto");
-}
-
-// Función que normaliza los bordes de los inputs
-function resetInput(input) {
-    input.classList.remove("incompleto");
 }
 
 // Función que muestra un alerta de que falta contenido en los inputs
@@ -215,6 +198,26 @@ function faltanDatos() {
         icon: 'error',
         confirmButtonText: "Entendido"
     })
+}
+
+// Función que cambia la class de los inputs vacíos para que el borde sea rojo
+function colorearInputsVacios(inputs) {
+    inputs.forEach(input => {
+        (!verificarInput(input)) ? input.classList.add("incompleto"): input.classList.remove("incompleto")
+    })
+}
+
+// Función que normaliza los bordes de los inputs
+function resetInputs(inputs) {
+    inputs.forEach(input=> input.classList.remove("incompleto"));
+}
+
+// Función que devuelve un array con los elementos cuya propiedad contiene determinados caracteres
+function filtrar(lista, caracteres, propiedad) {
+    let buscarPor;
+    propiedad == "Paciente" ? buscarPor = "nombre" : buscarPor = "propietario";
+    let filtrado = lista.filter(paciente => paciente[buscarPor].toLowerCase().includes(caracteres.toLowerCase()));
+    return filtrado;
 }
 
 // Evento para que se muestren sólo los pacientes que incluyen los caracteres que tipea el usuario
@@ -237,24 +240,17 @@ agregarNuevoPaciente.addEventListener("click", () => {
 // Evento para cerrar el modal de nuevo paciente y poner en blanco todos sus inputs
 cancelNuevoPaciente.addEventListener("click", () => {
     cerrarModal(modalNuevoPaciente);
-    resetInput(nombrePacNuevo);
-    resetInput(propPacNuevo);
-    resetInput(especiePacNuevo);
+    resetInputs([nombrePacNuevo, propPacNuevo, especiePacNuevo]);
     nuevoPacienteForm.reset();
 })
 
 // Evento que chequea que el paciente ingresado/modificado contenga nombre, propietario y especie para luego agregarlo a la lista de pacientes
 confirmarNuevoPaciente.addEventListener("click", () => {
-
-    // PONER ESTOS EN UNA SOLA FUNCION
-    colorearInput(nombrePacNuevo);
-    colorearInput(propPacNuevo);
-    colorearInput(especiePacNuevo);
+    colorearInputsVacios([nombrePacNuevo, propPacNuevo, especiePacNuevo]);
 
     if (!verificarInput(nombrePacNuevo) || !verificarInput(propPacNuevo) || !verificarInput(especiePacNuevo)) {
         faltanDatos();
-    } 
-    else {
+    } else {
         agregarPaciente(nombrePacNuevo.value, propPacNuevo.value, especiePacNuevo.value, sexoPacNuevo.value, edadPacNuevo.value, razaPacNuevo.value, pesoPacNuevo.value, historiaPacNuevo.value);
         cerrarModal(modalNuevoPaciente);
         guardarEnStorage(listaPacientes);
@@ -265,14 +261,11 @@ confirmarNuevoPaciente.addEventListener("click", () => {
 
 // Evento que chequea que el paciente ingresado/modificado contenga nombre, propietario y especie para luego modificarlo en la lista de pacientes
 confirmarCambiosPaciente.addEventListener("click", () => {
-    colorearInput(nombrePacNuevo);
-    colorearInput(propPacNuevo);
-    colorearInput(especiePacNuevo);
+    colorearInputsVacios([nombrePacNuevo, propPacNuevo, especiePacNuevo]);
 
     if (!verificarInput(nombrePacNuevo) || !verificarInput(propPacNuevo) || !verificarInput(especiePacNuevo)) {
         faltanDatos();
-    } 
-    else {
+    } else {
         for (i = 0; i < listaPacientes.length; i++) {
             if (listaPacientes[i].id === IDseleccionado) {
                 listaPacientes[i].nombre = nombrePacNuevo.value;
@@ -285,10 +278,10 @@ confirmarCambiosPaciente.addEventListener("click", () => {
                 listaPacientes[i].historia = historiaPacNuevo.value
             }
         }
-        nuevoPacienteForm.reset();
         cerrarModal(modalNuevoPaciente);
-        actualizarPacientes(listaPacientes);
         guardarEnStorage(listaPacientes);
+        nuevoPacienteForm.reset();
+        actualizarPacientes(listaPacientes);
     }
 })
 
@@ -297,7 +290,7 @@ cerrarPacActual.addEventListener("click", () => {
     cerrarModal(modalPacActual);
 })
 
-// Evento para que al cargar la página nos muestre un mensaje de bienvenida con una imagen obtenida a través de una API. Además, en caso de no existir info de pacientes en el localStorage actual, hace un fetch de un archivo json agregando pacientes predeterminados.
+// Evento para que al cargar la página nos muestre un mensaje de bienvenida con una imagen obtenida a través de una API. Además, en caso de no existir info previa en el localStorage actual, hace un fetch de un archivo json agregando pacientes predeterminados.
 window.addEventListener("load", () => {
     fetch("https://dog.ceo/api/breeds/image/random")
         .then(response => response.json())
@@ -321,7 +314,7 @@ window.addEventListener("load", () => {
             .then(response => response.json())
             .then(data => {
                 actualizarPacientes(data);
-                listaPacientes = data
+                listaPacientes = data;
             })
     }
 })
