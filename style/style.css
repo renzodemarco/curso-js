@@ -16,7 +16,7 @@
 
 body {
     display: grid;
-    width: 100%;
+    width: 100vw ;
     height: 100vh;
     grid-template-areas: 
     "titulo"
@@ -29,7 +29,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(75, 21, 126);
+    background-color: rgb(80, 38, 120);
     color: #fff;
 }
 
@@ -96,9 +96,6 @@ h1 {
 
 .lista-pacientes {
     grid-column: 2 / 3;
-    border-radius: 0;
-    margin: 0;
-    padding: 0;
     display: flex;
     justify-content: flex-start;
     overflow-y: auto;
@@ -161,31 +158,6 @@ h1 {
     flex-direction: column;
 }
 
-.button-container {
-    display: flex;
-    justify-content: space-around;
-}
-
-.card button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2.6em;
-    width: 2.6em;
-    padding: .4em;
-}
-
-.card button img {
-    width: 1.6em;
-}
-
-
-.contenido .card:hover {
-    cursor: pointer;
-    transform: scale(1.04);
-    transition: 0.2s;
-}
-
 .sombra {
     position: absolute;
     width: 100%;
@@ -230,19 +202,6 @@ h1 {
     min-height: 4em;
 }
 
-.medicaciones {
-    min-width: 26em;
-}
-
-.nuevo-paciente .list-group-item {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.list-group-item-buttons {
-    display: flex;
-}
-
 .list-group button {
     width: 1.6em;
     height: 1.6em;
@@ -260,10 +219,6 @@ h1 {
 .paciente-en-lista {
     height: 62px;
     margin: 1px 1px 0;
-}
-
-#addNuevaMedicacion {
-    color: #888
 }
 
 .nuevo-paciente-submit {
@@ -328,10 +283,6 @@ h1 {
     100% {
         opacity: 0;
     }
-}
-
-.alert-danger {
-    z-index: 900;
 }
 
 .list-group img {
