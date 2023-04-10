@@ -71,10 +71,10 @@ function actualizarPacientes(lista) {
         <button class="btn-primary" id="botonObservar${indice}" title="Ver paciente">
             <img src="./img/ver.svg"></img>
         </button>
-        <button class="btn-secondary" id="botonModificar${indice}" title="Ver paciente">
+        <button class="btn-secondary" id="botonModificar${indice}" title="Editar paciente">
             <img src="./img/editar.svg"></img>
         </button>
-        <button class="btn-danger" id="botonEliminar${indice}" title="Ver paciente">
+        <button class="btn-danger" id="botonEliminar${indice}" title="Eliminar paciente">
             <img src="./img/eliminar.svg"></img>
         </button>`
         contenedorLista.appendChild(nuevoPaciente);
