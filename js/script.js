@@ -107,11 +107,9 @@ function actualizarPacientes(lista) {
 // Función para eliminar pacientes mediante su id
 function eliminarPaciente(id) {
     for (i = 0; i < listaPacientes.length; i++) {
-        if (listaPacientes[i].id === id) {
-            listaPacientes.splice(i, 1);
-            break;
+        listaPacientes[i].id === id && listaPacientes.splice(i, 1);
+        break;
         }
-    }
     guardarEnStorage(listaPacientes);
 }
 
@@ -119,13 +117,13 @@ function eliminarPaciente(id) {
 function verPaciente(paciente) {
     abrirModal(modalPacActual);
     imgPacActual.src = imgPaciente(paciente);
-    nombrePacActual.innerHTML = paciente.nombre;
-    propPacActual.innerHTML = paciente.propietario;
-    sexoPacActual.innerHTML = paciente.sexo;
-    edadPacActual.innerHTML = paciente.edad;
-    razaPacActual.innerHTML = paciente.raza;
-    pesoPacActual.innerHTML = paciente.peso,
-    historiaPacActual.innerHTML = paciente.historia;
+    nombrePacActual.innerHTML = paciente.nombre || "Sin información";
+    propPacActual.innerHTML = paciente.propietario || "Sin información";
+    sexoPacActual.innerHTML = paciente.sexo || "Sin información";
+    edadPacActual.innerHTML = paciente.edad || "Sin información";
+    razaPacActual.innerHTML = paciente.raza || "Sin información";
+    pesoPacActual.innerHTML = paciente.peso || "Sin información",
+    historiaPacActual.innerHTML = paciente.historia || "Sin información";
 }
 
 // Función que me abre un modal para modificar el paciente seleccionado
